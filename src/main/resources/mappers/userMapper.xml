@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="tedu.store.mapper.UserMapper">
+
+    <select id="findUserByUsername" resultType="tedu.store.entity.User">
+        SELECT
+            uid,username,avatar,salt,password,is_deleted isDeleted
+        FROM
+            user
+        WHERE
+            username=#{username}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO
+                user(
+            username,password,
+            salt,gender,
+            phone,email,
+            avatar,is_deleted,
+            create_user,create_time,
+            modified_user,modified_time
+            )
+        VALUES(
+            #{username},#{password},
+            #{salt},#{gender},
+            #{phone},#{email},
+            #{avatar},#{isDeleted},
+            #{createUser},#{createTime},
+            #{modifiedUser},#{modifiedTime}
+            )
+    </insert>
+
+    <select id="findById" resultType="tedu.store.entity.User">
+        SELECT
+            username,password,salt,is_deleted isDeleted,phone,email,gender
+        FROM
+            user
+        WHERE
+            uid=#{uid}
+    </select>
+
+    <update id="updateInfo">
+        UPDATE
+            user
+        SET
+            phone=#{phone},email=#{email},gender=#{gender},
+		    modified_user=#{modifiedUser},modified_time=#{modifiedTime}
+        WHERE
+            uid=#{uid}
+    </update>
+
+    <update id="updatePassword">
+        UPDATE
+             user
+        SET
+            password=#{password},modified_user=#{modifiedUser},modified_time=#{modifiedTime}
+        WHERE
+            uid=#{uid}
+    </update>
+
+    <update id="updateAvatar">
+        UPDATE
+            user
+        SET
+            avatar=#{avatar},modified_user=#{modifiedUser},modified_time=#{modifiedTime}
+        WHERE
+            uid=#{uid}
+    </update>
+
+</mapper>
