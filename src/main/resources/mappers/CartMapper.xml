@@ -33,7 +33,7 @@
     <!--Cart findByUidAndGid(Integer uid,Long gid);-->
     <select id="findByUidAndGid" resultType="tedu.store.entity.Cart">
         SELECT
-            cid,num,price
+            cid,num
         FROM
             t_cart
         WHERE
