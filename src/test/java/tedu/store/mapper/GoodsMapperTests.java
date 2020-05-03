@@ -3,9 +3,13 @@ package tedu.store.mapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import tedu.store.entity.Goods;
 import tedu.store.service.IGoodsService;
+import tedu.store.service.ex.GoodsNotFoundException;
+import tedu.store.service.ex.UpdateException;
 
+import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
@@ -62,5 +66,28 @@ public class GoodsMapperTests {
         Long id=10000005l;
         Goods goods=service.getById(id);
         System.err.println(goods);
+    }
+
+    @Test
+    public void testUpdateNum(){
+        Integer num=100;
+        Long id=10000001L;
+        String modifiedUser="美人鱼";
+        Integer rows=mapper.updateNum(id,num,modifiedUser,new Date());
+        System.err.println(rows);
+    }
+
+    @Test
+    public void testUpdateGoodsNum(){
+        try {
+            Long id=10000001L;
+            Integer num=10000;
+            String username="她的微笑";
+            service.updateGoodsNum(id,username,num);
+        } catch (UpdateException e) {
+            System.err.println(e.getMessage());
+        } catch (GoodsNotFoundException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }

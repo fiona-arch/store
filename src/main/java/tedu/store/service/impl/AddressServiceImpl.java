@@ -33,7 +33,6 @@ public class AddressServiceImpl implements IAddressService {
         //是否为默认
         Integer isDefaut=count==0?1:0;
         address.setIsDefault(isDefaut);
-        //TODO 补全省市区
         District province=districtService.getByCode(address.getProvinceCode());
         District city=districtService.getByCode(address.getCityCode());
         District area=districtService.getByCode(address.getAreaCode());

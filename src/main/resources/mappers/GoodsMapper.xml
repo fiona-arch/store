@@ -4,6 +4,16 @@
 
 <mapper namespace="tedu.store.mapper.GoodsMapper">
 
+    <!--Integer updateNum(Long id);-->
+    <update id="updateNum">
+        UPDATE
+            t_goods
+        SET
+            num=#{num},modified_user=#{modifiedUser},modified_time=#{modifiedTime}
+        WHERE
+            id=#{id}
+    </update>
+
     <!-- List<Goods> findHotList();-->
     <select id="findHotList" resultType="tedu.store.entity.Goods">
         SELECT

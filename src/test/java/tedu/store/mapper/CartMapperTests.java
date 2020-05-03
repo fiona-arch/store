@@ -7,10 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tedu.store.entity.Cart;
 import tedu.store.entity.vo.CartVO;
 import tedu.store.service.ICartService;
-import tedu.store.service.ex.AccessDeniedException;
-import tedu.store.service.ex.CartNotFoundException;
-import tedu.store.service.ex.InsertException;
-import tedu.store.service.ex.UpdateException;
+import tedu.store.service.ex.*;
 
 import java.util.Date;
 import java.util.List;
@@ -110,4 +107,50 @@ public class CartMapperTests {
         }
 
     }
+
+    @Test
+    public void testReduce(){
+        try {
+            Integer uid=9;
+            String username="麋鹿";
+            Integer cid=1;
+            service.reduce(uid,username,cid);
+        } catch (CartNotFoundException e) {
+            System.err.println(e.getMessage());
+        } catch (AccessDeniedException e) {
+            System.err.println(e.getMessage());
+        } catch (UpdateException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDeleteByCids(){
+        Integer []cids={1,2};
+        Integer rows=mapper.deleteByCids(cids);
+        System.err.println(rows);
+    }
+
+    @Test
+    public void testFindCartByCids(){
+        Integer []cids={6,7};
+        List<Cart> carts=mapper.findCartByCids(cids);
+        System.err.println(carts);
+    }
+
+    @Test
+    public void testDeleteCart(){
+        try {
+            Integer []cids={4,5};
+            Integer uid=17;
+            service.deleteCart(uid,cids);
+        } catch (DeleteException e) {
+            System.err.println(e.getMessage());
+        } catch (AccessDeniedException e) {
+            System.err.println(e.getMessage());
+        } catch (CartNotFoundException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
 }

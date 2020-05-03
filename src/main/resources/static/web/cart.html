@@ -332,6 +332,29 @@
 
 				})
 			}
+
+			function reduceNum(cid){
+				console.log(cid)
+				$.ajax({
+					"url":"/carts/"+cid+"/reduce",
+					"type":"post",
+					"dataType":"json",
+					"success":function(json){
+						var price=parseInt($("#price_"+cid).html());
+						if(json.state==2000){
+							$("#inp_num_"+cid).val(json.data)
+							$("#total_price_"+cid).html(json.data*price)
+						}else{
+							alert(json.message);
+							showCartList();
+						}
+					},
+					"error":function(){
+						alert("您的登陆信息已过期,请重新登陆")
+					}
+
+				})
+			}
 		</script>
 	</body>
 

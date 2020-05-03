@@ -9,6 +9,7 @@ import tedu.store.entity.Goods;
 import tedu.store.service.IGoodsService;
 import tedu.store.util.JsonResult;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -34,6 +35,13 @@ public class GoodsController extends BaseController{
     public JsonResult<Goods> getById(@PathVariable("id") Long id){
         Goods goods=service.getById(id);
         return new JsonResult<>(SUCCESS,goods);
+    }
+
+    @RequestMapping("{id}/update_goods_num")
+    public JsonResult<Void> updateGoodsNum(@PathVariable("id")Long id, HttpSession session,Integer num){
+        String username=getUsernameFromSession(session);
+        service.updateGoodsNum(id,username,num);
+        return new JsonResult<>(SUCCESS);
     }
 
 }

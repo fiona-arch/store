@@ -7,10 +7,7 @@ import tedu.store.entity.Cart;
 import tedu.store.entity.vo.CartVO;
 import tedu.store.mapper.CartMapper;
 import tedu.store.service.ICartService;
-import tedu.store.service.ex.AccessDeniedException;
-import tedu.store.service.ex.CartNotFoundException;
-import tedu.store.service.ex.InsertException;
-import tedu.store.service.ex.UpdateException;
+import tedu.store.service.ex.*;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -70,6 +67,39 @@ public class CartServiceImpl implements ICartService {
     }
 
     @Override
+    public void deleteCart(Integer uid, Integer[] cids) throws DeleteException, AccessDeniedException, CartNotFoundException {
+        //根据cids查找对应的购物车数据
+        List<Cart> carts=findCartByCids(cids);
+        //比对uid uid不一致抛出异常
+        if(carts.size()!=cids.length){
+            throw new CartNotFoundException("不存在!失败");
+        }
+        Iterator<Cart> iterator=carts.iterator();
+        while(iterator.hasNext()){
+            if(iterator.next().getUid()!=uid){
+                throw new AccessDeniedException("删除数据失败!您无法操作他人数据");
+            }
+        }
+        //删除购物车数据
+        deleteByCids(cids);
+
+    }
+
+
+    @Override
+    public Integer reduce(Integer uid, String username, Integer cid) throws CartNotFoundException, AccessDeniedException, UpdateException {
+       Cart cart=findByCid(cid);
+       if(cart.getUid()!=uid){
+           throw new AccessDeniedException("减少购物车商品数量失败!您无法操作他人数据");
+       }
+       Integer oldNum=cart.getNum();
+       Integer num=oldNum-1;
+       updateNum(cid,num,username,new Date());
+       Cart result=findByCid(cid);
+       return result.getNum();
+    }
+
+    @Override
     public List<CartVO> getByCids(Integer[] cids, Integer uid) {
         List<CartVO> carts=findByCids(cids);
         Iterator<CartVO> iterator=carts.iterator();
@@ -115,5 +145,16 @@ public class CartServiceImpl implements ICartService {
 
     private List<CartVO> findByCids(Integer []cids){
         return mapper.findByCids(cids);
+    }
+
+    private void deleteByCids(Integer []cids){
+        Integer rows=mapper.deleteByCids(cids);
+        if(rows==0){
+            throw new DeleteException("删除购物车商品数据失败!发生了未知错误");
+        }
+    }
+
+    private List<Cart> findCartByCids(Integer []cids){
+        return mapper.findCartByCids(cids);
     }
 }

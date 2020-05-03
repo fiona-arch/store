@@ -2,10 +2,7 @@ package tedu.store.service;
 
 import tedu.store.entity.Cart;
 import tedu.store.entity.vo.CartVO;
-import tedu.store.service.ex.AccessDeniedException;
-import tedu.store.service.ex.CartNotFoundException;
-import tedu.store.service.ex.InsertException;
-import tedu.store.service.ex.UpdateException;
+import tedu.store.service.ex.*;
 
 import java.util.List;
 
@@ -21,13 +18,17 @@ public interface ICartService {
      */
     void addToCart(Integer uid, String username, Cart cart) throws InsertException, UpdateException;
 
-
     /**
-     * 获取某用户的购物车数据列表
-     * @param uid 用户的id
-     * @return 该用户的购物车数据列表
+     * 删除购物车中的商品数据
+     * @param uid 用户id
+     * @param cids 购物车id
+     * @throws DeleteException 删除异常
+     * @throws AccessDeniedException 拒绝访问异常
+     * @throws CartNotFoundException 购物车商品不存在异常
      */
-    List<CartVO> getByUid(Integer uid);
+    void deleteCart(Integer uid,Integer []cids)throws DeleteException,AccessDeniedException,CartNotFoundException;
+
+
 
     /**
      * 购物车商品数量增加
@@ -40,6 +41,20 @@ public interface ICartService {
      * @throws UpdateException 更新异常
      */
     Integer add(Integer uid,String username,Integer cid)throws CartNotFoundException, AccessDeniedException,
+
+                                                            UpdateException;
+
+    /**
+     * 购物车商品数量减少
+     * @param uid
+     * @param username
+     * @param cid
+     * @return 修改后的购物车商品数量
+     * @throws CartNotFoundException
+     * @throws AccessDeniedException
+     * @throws UpdateException
+     */
+    Integer reduce(Integer uid,String username,Integer cid)throws CartNotFoundException,AccessDeniedException,
                                                             UpdateException;
 
     /**
@@ -49,5 +64,13 @@ public interface ICartService {
      * @return 匹配的购物车数据列表
      */
     List<CartVO> getByCids(Integer []cids,Integer uid);
+
+    /**
+     * 获取某用户的购物车数据列表
+     * @param uid 用户的id
+     * @return 该用户的购物车数据列表
+     */
+    List<CartVO> getByUid(Integer uid);
+
 
 }

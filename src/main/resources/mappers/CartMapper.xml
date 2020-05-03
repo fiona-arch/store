@@ -20,6 +20,19 @@
         )
     </insert>
 
+    <!--Integer deleteByCids(Integer []cids);-->
+    <delete id="deleteByCids">
+        DELETE FROM
+            t_cart
+        WHERE
+            cid
+        IN(
+            <foreach collection="array" separator="," item="cid">
+                #{cid}
+            </foreach>
+        )
+    </delete>
+
     <!--  Integer  updateNum(Integer cid, Integer num, String modifiedUser, Date modifiedTime);-->
     <update id="updateNum">
         UPDATE
@@ -92,6 +105,21 @@
             c.create_time desc
 
 
+    </select>
+
+    <!-- List<Cart> findCartByCids(Integer []cids);-->
+    <select id="findCartByCids" resultType="tedu.store.entity.Cart">
+        SELECT
+            cid,gid,uid,num
+        FROM
+            t_cart
+        WHERE
+            cid
+        IN(
+            <foreach collection="array" separator="," item="cid">
+                #{cid}
+            </foreach>
+        )
     </select>
 
 

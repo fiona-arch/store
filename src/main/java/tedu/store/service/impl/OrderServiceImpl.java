@@ -10,6 +10,7 @@ import tedu.store.entity.vo.CartVO;
 import tedu.store.mapper.OrderMapper;
 import tedu.store.service.IAddressService;
 import tedu.store.service.ICartService;
+import tedu.store.service.IGoodsService;
 import tedu.store.service.IOderService;
 import tedu.store.service.ex.InsertException;
 
@@ -24,10 +25,11 @@ public class OrderServiceImpl implements IOderService {
     private IAddressService addressService;
     @Autowired
     private ICartService cartService;
+    @Autowired
+    private IGoodsService goodsService;
     @Override
     @Transactional
     public Order create(Integer aid, Integer[] cids, Integer uid, String username) throws InsertException {
-
         //创建时间对象
         Date now=new Date();
         //insert order
@@ -70,9 +72,13 @@ public class OrderServiceImpl implements IOderService {
             orderItem.setModifiedUser(username);
             orderItem.setModifiedTime(now);
             insertOrderItem(orderItem);
+            //获取商品原数量
+            //修改对应商品的库存量
+            Integer goodsOldNum=goodsService.getById(cart.getGid()).getNum();
+            goodsService.updateGoodsNum(cart.getGid(),username,goodsOldNum-cart.getNum());
         }
-        //TODO 删除购物车中对应的数据
-        //TODO 修改对应商品的库存量
+        //删除购物车商品
+        cartService.deleteCart(uid,cids);
         return order;
     }
 

@@ -33,6 +33,13 @@ public interface CartMapper {
     Cart findByCid(Integer cid);
 
     /**
+     * 删除购物车中的商品数量
+     * @param cids 购物车id
+     * @return 大于0代表删除成功  等于0代表删除失败
+     */
+    Integer deleteByCids(Integer []cids);
+
+    /**
      * 更新购物车中已存在的商品数量
      * @param cid 购物车商品id
      * @param num 购物车商品数量
@@ -47,8 +54,11 @@ public interface CartMapper {
 
     /**
      *
-     * @param cid
+     * @param cids
      * @return
      */
     List<CartVO> findByCids(Integer[] cids);
+
+    List<Cart> findCartByCids(Integer []cids);
+
 }
